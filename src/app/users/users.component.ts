@@ -18,6 +18,7 @@ export class UsersComponent implements OnInit {
   selectedUser: User;
   newUser: boolean;
   totalRecords: number;
+  roles: string[];
 
   constructor(private userService: UserService, private confirmationService: ConfirmationService) { }
 

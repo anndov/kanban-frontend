@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
+import { AuthenticationService } from '../_services/authentication.service';
 
 @Injectable()
 export class UserService {
@@ -12,9 +13,10 @@ export class UserService {
   private headers = new Headers();
   private usersUrl = 'http://localhost:8080/users';
 
-  constructor(private http: Http) {
-    this.headers.append('Content-Type', 'application/json');
+  constructor(private http: Http, private authenticationService: AuthenticationService) {
+    this.headers.append('Content-Type', 'application/json; charset=utf-8');
     this.headers.append('Access-Control-Allow-Origin', '*');
+    this.headers.append('Authorization', 'Bearer ' + this.authenticationService.token);
   }
 
   delete(userid: number): Promise<void> {
@@ -42,7 +44,7 @@ export class UserService {
   getUsers(page: number, size:number): Promise<User[]> {
     let pages: any[] = [];
     const url = `${this.usersUrl}?page=${page}&size=${size}`;
-    return this.http.get(url)
+    return this.http.get(url, { headers: this.headers })
       .toPromise()
       .then(res => {
         pages[0] = res.json().content as User[];
@@ -52,14 +54,15 @@ export class UserService {
       .catch(this.handleError);
   }
 
-  // getUsers(): Promise<User[]> {
-  //   let page: any[] = [];
-  //   return this.http.get(this.usersUrl)
+  // getUsers(page: number, size:number): Promise<User[]> {
+  //   let pages: any[] = [];
+  //   const url = `${this.usersUrl}?page=${page}&size=${size}`;
+  //   return this.http.get(url)
   //     .toPromise()
   //     .then(res => {
-  //       page[0] = res.json().content as User[];
-  //       page[1] = res.json().totalElements as number;
-  //       return page;
+  //       pages[0] = res.json().content as User[];
+  //       pages[1] = res.json().totalElements as number;
+  //       return pages;
   //     })
   //     .catch(this.handleError);
   // }

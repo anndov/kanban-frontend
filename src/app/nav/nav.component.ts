@@ -3,8 +3,7 @@ import { MenuItem } from 'primeng/primeng';
 
 @Component({
   selector: 'kan-nav',
-  templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.css']
+  templateUrl: './nav.component.html'
 })
 export class NavComponent implements OnInit {
 
@@ -12,6 +11,7 @@ export class NavComponent implements OnInit {
   
       ngOnInit() {
           this.items = [
+              {label: "Home", routerLink: "/"},
               {label: "Dashboard"},
               {label: "Users", routerLink: "/users"}
           ];

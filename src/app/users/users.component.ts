@@ -23,12 +23,14 @@ export class UsersComponent implements OnInit {
   constructor(private userService: UserService, private confirmationService: ConfirmationService) { }
 
   save() {
-    if (this.newUser)
+    if (this.newUser) {
+      this.user.enabled = true;
       this.userService.create(this.user).then(user => {
         this.user = user;
         this.users.push(user);
         this.totalRecords++;
       });
+    }
     else
       this.userService.update(this.user).then(user => {
         this.users[this.findSelectedUserIndex()] = user;
@@ -44,7 +46,7 @@ export class UsersComponent implements OnInit {
       accept: () => {
         let index = this.findSelectedUserIndex();
         this.users.splice(index, 1);
-        this.userService.delete(this.user.userid);
+        this.userService.delete(this.user.id);
         this.totalRecords--;
         this.user = null;
         this.display = false;
@@ -79,7 +81,7 @@ export class UsersComponent implements OnInit {
 
     //imitate db connection over a network
     setTimeout(() => {
-      this.userService.getUsers((event.first/5), event.rows).then(res => {
+      this.userService.getUsers((event.first / 5), event.rows).then(res => {
         let page: any[] = res;
         this.users = page[0] as User[];
       });

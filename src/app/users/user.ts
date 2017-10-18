@@ -1,10 +1,9 @@
 export class User {
-    userid: number;
-    userName: string;
+    id: number;
+    username: string;
     password: string;
+    firstname: string;
+    lastname: string;
     email: string;
-    enabled: number;
-    firstName: string;
-    lastName: string;
-    description: string;
+    enabled: boolean;
 }

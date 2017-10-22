@@ -1,3 +1,5 @@
+import { Authority } from "./Authority";
+
 export class User {
     id: number;
     username: string;
@@ -6,4 +8,7 @@ export class User {
     lastname: string;
     email: string;
     enabled: boolean;
+    authorities: Authority[];
+
+    constructor() { }
 }

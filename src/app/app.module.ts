@@ -8,7 +8,7 @@ import { routing } from './app.routing';
 import { MenubarModule, ButtonModule, DataListModule
        , DataTableModule, SharedModule, DialogModule,
          InputTextModule, PasswordModule, ConfirmDialogModule
-         , ConfirmationService, LazyLoadEvent, PanelModule } from 'primeng/primeng';
+         , ConfirmationService, LazyLoadEvent, PanelModule, AutoCompleteModule } from 'primeng/primeng';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -18,6 +18,7 @@ import { LoginComponent } from './login/login.component';
 import { AuthenticationService } from './_services/authentication.service';
 import { AuthGuard } from './_guards/auth.guard';
 import { HomeComponent } from './home/home.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { HomeComponent } from './home/home.component';
     NavComponent,
     UsersComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +37,7 @@ import { HomeComponent } from './home/home.component';
     ReactiveFormsModule,
     routing,
     MenubarModule, ButtonModule, DataListModule, DataTableModule,SharedModule, DialogModule,
-    InputTextModule, PasswordModule, ConfirmDialogModule, PanelModule
+    InputTextModule, PasswordModule, ConfirmDialogModule, PanelModule, AutoCompleteModule
   ],
   providers: [ UserService, ConfirmationService, AuthenticationService, AuthGuard ],
   bootstrap: [AppComponent]

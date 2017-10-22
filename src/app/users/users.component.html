@@ -11,9 +11,11 @@
       <input type="text" pInputText id="username" [(ngModel)]="user.username" name="username" placeholder="User Name" required>
     </div>
 
-    <div class="ui-grid-col-4"><label for="password">Password</label></div>
-    <div class="ui-grid-col-8">
-      <input type="password" pPassword id="password" [(ngModel)]="user.password" name="password" placeholder="Password" required>
+    <div *ngIf="newUser">
+      <div class="ui-grid-col-4"><label for="password">Password</label></div>
+      <div class="ui-grid-col-8">
+        <input type="password" pPassword id="password" [(ngModel)]="user.password" name="password" placeholder="Password" required>
+      </div>
     </div>
 
     <div class="ui-grid-col-4"><label for="email">Email</label></div>
@@ -31,9 +33,17 @@
     <div class="ui-grid-col-8">
       <input type="text" pInputText id="lastname" [(ngModel)]="user.lastname" name="lastname" placeholder="Last Name">
     </div>
+
+    <h3>Authorities</h3>
+    <span class="ui-fluid">
+        <p-autoComplete [(ngModel)]="auth" appendTo="body" (completeMethod)="filterAuthority($event)" name="auth" [suggestions]="filteredAuthorities" styleClass="wid100"
+            [minLength]="1" placeholder="Authorities" field="value" [multiple]="true">
+        </p-autoComplete>
+    </span>
+
     <p-footer>
       <div class="ui-dialog-buttonpane ui-helper-clearfix">
-        <button pButton type="button" (click)="delete()" label="Delete" class="ui-button-danger"></button>
+        <button *ngIf="!newUser" pButton type="button" (click)="delete()" label="Delete" class="ui-button-danger"></button>
         <button pButton type="button" (click)="save()" label="Save" [disabled]="!f.valid"></button>
       </div>
     </p-footer>
@@ -42,8 +52,7 @@
 <button type="button" (click)="showDialogToAdd()" pButton icon="fa-external-link-square" label="Add"></button>
 <!-- Data table -->
 <p-dataTable [immutable]=false [value]="users" selectionMode="single" [(selection)]="selectedUser" (onRowSelect)="onRowSelect($event)"
-  rows=5 [paginator]="true" [lazy]="true" [totalRecords]="totalRecords" (onLazyLoad)="loadUsersLazy($event)"
-  [responsive]="true">
+  rows=5 [paginator]="true" [lazy]="true" [totalRecords]="totalRecords" (onLazyLoad)="loadUsersLazy($event)" [responsive]="true">
   <p-column field="username" header="User Name"></p-column>
   <p-column field="email" header="Email"></p-column>
   <p-column field="firstName" header="First Name"></p-column>

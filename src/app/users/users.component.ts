@@ -4,6 +4,8 @@ import { UserService } from './user.service';
 import { User } from './user';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ConfirmationService, LazyLoadEvent } from 'primeng/primeng';
+import { AuthorityName } from './AuthorityName';
+import { Authority } from './Authority';
 
 @Component({
   selector: 'kan-users',
@@ -18,23 +20,52 @@ export class UsersComponent implements OnInit {
   selectedUser: User;
   newUser: boolean;
   totalRecords: number;
-  roles: string[];
+  authorities = [
+    new AuthorityName('ROLE_ADMIN','Role Admin'),
+    new AuthorityName('ROLE_USER','Role User')
+  ];
+  // authorities = [
+  //   { key: "ROLE_ADMIN", value: "Role Admin" },
+  //   { key: "ROLE_USER", value: "Role User" }
+  // ];
+  auth: AuthorityName[];
+  filteredAuthorities: AuthorityName[];
 
   constructor(private userService: UserService, private confirmationService: ConfirmationService) { }
+
+  filterAuthority(event) {
+    //in a real application, make a request to a remote url with the query and return filtered results, for demo we filter at client side
+    let filtered : AuthorityName[] = [];
+    for(let i = 0; i < this.authorities.length; i++) {
+        let authority = this.authorities[i];
+        if(authority.value.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
+            filtered.push(authority);
+        }
+    }
+    this.filteredAuthorities = filtered;
+}
 
   save() {
     if (this.newUser) {
       this.user.enabled = true;
+      this.user.authorities = [];
+      for(let i=0; i < this.auth.length; i++) {
+        this.user.authorities.push(new Authority(this.auth[i].key));
+      }
       this.userService.create(this.user).then(user => {
         this.user = user;
         this.users.push(user);
         this.totalRecords++;
       });
     }
-    else
+    else {
+      for(let i=0; i < this.auth.length; i++) {
+        this.user.authorities.push(new Authority(this.auth[i].key));
+      }
       this.userService.update(this.user).then(user => {
         this.users[this.findSelectedUserIndex()] = user;
       });
+    }
     this.display = false;
   }
 
@@ -60,6 +91,12 @@ export class UsersComponent implements OnInit {
   onRowSelect(event) {
     this.newUser = false;
     this.user = this.cloneUser(event.data);
+    this.auth = [];
+    for(let i = 0; i < this.user.authorities.length; i++)
+      for(let k = 0; k < this.authorities.length; k++)
+      if(this.user.authorities[i].name == this.authorities[k].key)
+      this.auth.push(this.authorities[k]);
+    
     this.display = true;
   }
 
@@ -102,6 +139,8 @@ export class UsersComponent implements OnInit {
 
   showDialogToAdd() {
     this.newUser = true;
+    this.filteredAuthorities = [];
+    this.auth = [];
     this.user = new User();
     this.display = true;
   }

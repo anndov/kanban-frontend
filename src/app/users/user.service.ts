@@ -6,6 +6,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import { AuthenticationService } from '../_services/authentication.service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class UserService {
@@ -13,7 +14,7 @@ export class UserService {
   private headers = new Headers();
   private usersUrl = 'http://localhost:8080/users';
 
-  constructor(private http: Http, private authenticationService: AuthenticationService) {
+  constructor(private router:Router, private http: Http, private authenticationService: AuthenticationService) {
     this.headers.append('Content-Type', 'application/json; charset=utf-8');
     this.headers.append('Access-Control-Allow-Origin', '*');
     this.headers.append('Authorization', 'Bearer ' + this.authenticationService.token);

@@ -1,4 +1,6 @@
-<div *ngIf="isLoggedIn">
-    <kan-nav></kan-nav>
+<div style="margin-right: 100px; margin-left: 100px;">
+        <div *ngIf="isLoggedIn" style="margin-bottom: 20px">
+                <kan-nav></kan-nav>
+            </div>
+            <router-outlet></router-outlet>
 </div>
-<router-outlet></router-outlet>

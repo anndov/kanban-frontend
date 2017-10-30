@@ -8,7 +8,8 @@ import { routing } from './app.routing';
 import { MenubarModule, ButtonModule, DataListModule
        , DataTableModule, SharedModule, DialogModule,
          InputTextModule, PasswordModule, ConfirmDialogModule
-         , ConfirmationService, LazyLoadEvent, PanelModule, AutoCompleteModule } from 'primeng/primeng';
+         , ConfirmationService, LazyLoadEvent, PanelModule
+         , AutoCompleteModule, DragDropModule, CalendarModule } from 'primeng/primeng';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -18,8 +19,9 @@ import { LoginComponent } from './login/login.component';
 import { AuthenticationService } from './_services/authentication.service';
 import { AuthGuard } from './_guards/auth.guard';
 import { HomeComponent } from './home/home.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { SignupComponent } from './signup/signup.component';
+import { BoardComponent } from './board/board.component';
+import { ManageBoardComponent } from './board/manage-board.component';
 
 @NgModule({
   declarations: [
@@ -28,8 +30,9 @@ import { SignupComponent } from './signup/signup.component';
     UsersComponent,
     LoginComponent,
     HomeComponent,
-    DashboardComponent,
-    SignupComponent
+    SignupComponent,
+    BoardComponent,
+    ManageBoardComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +42,8 @@ import { SignupComponent } from './signup/signup.component';
     ReactiveFormsModule,
     routing,
     MenubarModule, ButtonModule, DataListModule, DataTableModule,SharedModule, DialogModule,
-    InputTextModule, PasswordModule, ConfirmDialogModule, PanelModule, AutoCompleteModule
+    InputTextModule, PasswordModule, ConfirmDialogModule, PanelModule, AutoCompleteModule, 
+    DragDropModule, CalendarModule
   ],
   providers: [ UserService, ConfirmationService, AuthenticationService, AuthGuard ],
   bootstrap: [AppComponent]

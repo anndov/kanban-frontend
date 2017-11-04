@@ -1,7 +1,8 @@
-<p-menubar [model]="items">
+<p-menubar  [model]="items" >
   <span style="margin-right: 50px">
     Logged in as: <b>{{currentUser}}</b>
     </span> 
   <input type="text" pInputText placeholder="Search">
   <button pButton label="Logout" [routerLink]="['/login']" icon="fa-sign-out"></button>
 </p-menubar>
+{{boards.length}}

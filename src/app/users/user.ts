@@ -8,7 +8,7 @@ export class User {
     lastname: string;
     email: string;
     enabled: boolean;
+    validated: boolean;
     authorities: Authority[];
-
     constructor() { }
 }

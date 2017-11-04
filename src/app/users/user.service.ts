@@ -7,12 +7,13 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 import { AuthenticationService } from '../_services/authentication.service';
 import { Router } from '@angular/router';
+import { Constants } from '../_confs/constants';
 
 @Injectable()
 export class UserService {
 
   private headers = new Headers();
-  private usersUrl = 'http://localhost:8080/users';
+  private usersUrl = Constants.URL + '/users';
 
   constructor(private router:Router, private http: Http, private authenticationService: AuthenticationService) {
     this.headers.append('Content-Type', 'application/json; charset=utf-8');
@@ -54,19 +55,6 @@ export class UserService {
       })
       .catch(this.handleError);
   }
-
-  // getUsers(page: number, size:number): Promise<User[]> {
-  //   let pages: any[] = [];
-  //   const url = `${this.usersUrl}?page=${page}&size=${size}`;
-  //   return this.http.get(url)
-  //     .toPromise()
-  //     .then(res => {
-  //       pages[0] = res.json().content as User[];
-  //       pages[1] = res.json().totalElements as number;
-  //       return pages;
-  //     })
-  //     .catch(this.handleError);
-  // }
 
   private handleError(error: any): Promise<any> {
     return Promise.reject(error.message || error);

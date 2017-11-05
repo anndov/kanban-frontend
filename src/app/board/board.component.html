@@ -1,0 +1,60 @@
+
+<div class="ui-grid ui-grid-pad ui-grid-responsive">
+  <div class="ui-grid-row">
+    <div *ngFor="let c of boardColumns" style="width: 100%;">
+      <div class="ui-grid-col" pDroppable="tsks" (onDragEnd)="dragEnd($event)" (onDrop)="drop($event, c)">
+        <p-panel header="{{c.name}}">
+          <div class="ui-widget-content" style="border-right:0 none">
+            <div style="margin:0;padding:0">
+              <div *ngFor="let task of tasks" class="ui-state-default ui-helper-clearfix">
+                <div *ngIf="task.boardColumnId==c.columnOrder" [style]="{'margin':'8px 0 0 8px;float:left'}" pDraggable="tsks" (onDragStart)="dragStart($event,task)">
+                  <div on-dblclick="showTask(task)">
+                    {{task.name}} - {{task.description}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-panel>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog [(visible)]="display" header="Edit Task" *ngIf="selectedTask" showEffect="fade" [modal]="true" [responsive]="true">
+    <div class="ui-g">
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-g-4">
+                Name
+            </div>
+            <div class="ui-g-8">
+                <input pInputText type="text" [(ngModel)]="selectedTask.name" />
+            </div>
+        </div>
+
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-g-4">
+                Description
+            </div>
+            <div class="ui-g-8">
+                <input pInputText type="text" [(ngModel)]="selectedTask.description" />
+            </div>
+        </div>
+
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-g-4">
+                Due date
+            </div>
+            <div class="ui-g-8">
+                <p-calendar appendTo="body" [(ngModel)]="selectedTask.dueDate"></p-calendar>
+            </div>
+        </div>
+
+
+    </div>
+
+    <p-footer>
+      <button pButton type="button" (click)="saveTask()" label="Save Task"></button>
+      <button pButton type="button" (click)="closeTask()" label="Cancel" class="ui-button-secondary"></button>
+    </p-footer>
+</p-dialog>

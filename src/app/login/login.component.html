@@ -1,0 +1,21 @@
+<form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+    <p-panel [style]="{'position':'fixed', 'top':'50%', 'left':'50%', 'transform':'translate(-50%, -50%)'}">
+        <p-header>
+            <div class="ui-helper-clearfix">
+                <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">Login</span>
+            </div>
+        </p-header>
+        
+        <h3 class="first">User Name</h3>
+        <input id="username" type="text" size="30" pInputText name="username" [(ngModel)]="model.username" #username="ngModel" required>
+
+        <h3 class="first">Password</h3>
+        <input id="password" type="password" size="30" pInputText name="password" [(ngModel)]="model.password" #password="ngModel"
+            required>
+
+        <p-footer>
+            <button pButton type="submit" label="Login" class="ui-button-info"></button>
+            <button pButton type="button" label="Create an account" routerLink="/signup" class="ui-button-info"></button>
+        </p-footer>
+    </p-panel>
+</form>

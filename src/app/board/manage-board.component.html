@@ -1,0 +1,45 @@
+<form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm">
+    <p-panel header="Create board">
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    Name *:
+                </div>
+                <div class="ui-grid-col-10" style="width: 400px">
+                    <input pInputText type="text" [(ngModel)]="board.name" name="name" required placeholder="Required" />
+                </div>
+            </div>
+
+            <h4>Columns</h4>
+            <div *ngFor="let column of boardColumns">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-6" style="width: 300px">
+                        <input pInputText type="text" [value]="column.name" name="name" required />
+                    </div>
+
+                    <div class="ui-grid-col-2">
+                        {{column.columnOrder}}
+                    </div>
+
+                    <div class="ui-grid-col-4" style="margin-left:50px; width:100px">
+                        <button type="button" (click)="removeColumn(column.columnOrder)" pButton class="ui-button-danger" label="Remove"></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-grid-row" style="width:200px">
+                <div class="ui-grid-col">
+                   <button type="button" (click)="addColumn()" pButton class="ui-button-primary" label="Add column"></button> 
+                </div>
+            </div>
+
+            <div class="ui-grid-row" style="width:300px">
+                    <div class="ui-grid-col">
+                       <button type="submit" [disabled]="!f.valid" pButton class="ui-button-success" label="Save"></button> 
+                    </div>
+                </div>
+
+        </div>
+    </p-panel>
+</form>

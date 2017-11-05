@@ -4,6 +4,7 @@ import { Board } from '../board/board';
 import { BoardService } from '../board/board.service';
 import { BoardColumn } from '../board/boardcolumn';
 import { User } from '../users/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'kan-nav',
@@ -19,17 +20,17 @@ export class NavComponent implements OnInit {
 
   currentUser;
 
-  constructor(private boardService: BoardService) {
+  constructor(private boardService: BoardService, private router: Router) {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser')).username;
     
     this.boardService.getBoards().then(response => {
       this.boards = response as Board[];
       for (let b of this.boards) {
-        this.boardItems.push({ label: b.name, routerLink: "/board" });
+        this.boardItems.push({ label: b.name, command: (event: Event) => {
+          this.router.navigate(['/board', b.id]);
+        }});
       }
-      
       this.boardItems.push({ label: "Create board", icon: "fa-plus", routerLink: "/manage-board" });
-      
       this.items = [
         { label: "Home", routerLink: "/home" },
         { label: "Select board", items: this.boardItems },

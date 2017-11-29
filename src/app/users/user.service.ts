@@ -13,9 +13,9 @@ import { Constants } from '../_confs/constants';
 export class UserService {
 
   private headers = new Headers();
-  private usersUrl = Constants.URL + '/users';
+  private usersUrl = Constants.URL + '/rest/users';
 
-  constructor(private router:Router, private http: Http, private authenticationService: AuthenticationService) {
+  constructor(private router: Router, private http: Http, private authenticationService: AuthenticationService) {
     this.headers.append('Content-Type', 'application/json; charset=utf-8');
     this.headers.append('Access-Control-Allow-Origin', '*');
     this.headers.append('Authorization', 'Bearer ' + this.authenticationService.token);
@@ -43,7 +43,7 @@ export class UserService {
       .catch(this.handleError);
   }
 
-  getUsers(page: number, size:number): Promise<User[]> {
+  getUsers(page: number, size: number): Promise<User[]> {
     let pages: any[] = [];
     const url = `${this.usersUrl}?page=${page}&size=${size}`;
     return this.http.get(url, { headers: this.headers })
@@ -53,6 +53,23 @@ export class UserService {
         pages[1] = res.json().totalElements as number;
         return pages;
       })
+      .catch(this.handleError);
+  }
+
+  getUsersByUsernameAndBoardId(username: string, boardId: number): Promise<User[]> {
+    let url = this.usersUrl + '/username/' + username + '/board-id/' + boardId;
+
+    return this.http.get(url, { headers: this.headers })
+      .toPromise()
+      .then(response => response.json() as User[])
+      .catch(this.handleError);
+  }
+
+  getByAuthenticatedUser(): Promise<User> {
+    let url = this.usersUrl + '/' + JSON.parse(localStorage.getItem('currentUser')).username;
+    return this.http.get(url, { headers: this.headers })
+      .toPromise()
+      .then(response => response.json() as User)
       .catch(this.handleError);
   }
 

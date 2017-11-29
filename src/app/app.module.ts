@@ -9,7 +9,8 @@ import { MenubarModule, ButtonModule, DataListModule
        , DataTableModule, SharedModule, DialogModule,
          InputTextModule, PasswordModule, ConfirmDialogModule
          , ConfirmationService, LazyLoadEvent, PanelModule
-         , AutoCompleteModule, DragDropModule, CalendarModule } from 'primeng/primeng';
+         , AutoCompleteModule, DragDropModule, CalendarModule
+         , InputTextareaModule } from 'primeng/primeng';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -44,7 +45,7 @@ import { BoardService } from './board/board.service';
     routing,
     MenubarModule, ButtonModule, DataListModule, DataTableModule,SharedModule, DialogModule,
     InputTextModule, PasswordModule, ConfirmDialogModule, PanelModule, AutoCompleteModule, 
-    DragDropModule, CalendarModule
+    DragDropModule, CalendarModule, InputTextareaModule
   ],
   providers: [ UserService, ConfirmationService, AuthenticationService, AuthGuard, BoardService ],
   bootstrap: [AppComponent]

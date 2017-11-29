@@ -14,12 +14,26 @@ import { Observable } from "rxjs/Observable";
 export class BoardService {
 
     private headers = new Headers();
-    private boardsURL = Constants.URL + '/boards';
+    private boardsURL = Constants.URL + '/rest/boards';
 
     constructor(private router: Router, private http: Http, private authenticationService: AuthenticationService) {
         this.headers.append('Content-Type', 'application/json; charset=utf-8');
         this.headers.append('Access-Control-Allow-Origin', '*');
         this.headers.append('Authorization', 'Bearer ' + this.authenticationService.token);
+    }
+
+    create(board: Board): Promise<Board> {
+        return this.http.post(this.boardsURL, JSON.stringify(board), {headers: this.headers})
+        .toPromise()
+        .then(response => response.json() as Board)
+        .catch(this.handleError);
+    }
+
+    update(board: Board): Promise<Board> {
+        return this.http.put(this.boardsURL, JSON.stringify(board), {headers: this.headers})
+        .toPromise()
+        .then(response => response.json() as Board)
+        .catch(this.handleError);
     }
 
     getBoards(): Promise<Board[]> {

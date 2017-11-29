@@ -12,10 +12,10 @@
             </div>
 
             <h4>Columns</h4>
-            <div *ngFor="let column of boardColumns">
+            <div *ngFor="let column of boardColumns; let i = index">
                 <div class="ui-grid-row">
                     <div class="ui-grid-col-6" style="width: 300px">
-                        <input pInputText type="text" [value]="column.name" name="name" required />
+                        <input pInputText type="text" [(ngModel)]="column.name" name="columnName_{{i}}" required />
                     </div>
 
                     <div class="ui-grid-col-2">

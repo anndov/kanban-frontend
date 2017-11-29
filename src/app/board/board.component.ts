@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Board } from './board';
 import { BoardColumn } from './boardcolumn';
-import { Task } from '../task/task';
 import { BoardService } from './board.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { BoardTask } from '../task/boardtask';
+import { User } from '../users/user';
+import { UserService } from '../users/user.service';
 
 @Component({
   selector: 'kan-board',
@@ -13,34 +15,48 @@ export class BoardComponent implements OnInit {
 
   board: Board;
   boardColumns: BoardColumn[];
+  draggedTask: BoardTask;
+  display = false;
+  selectedTask: BoardTask;
+  tasks: BoardTask[] = [];
+  taskHeader = 'Edit task';
+  filteredUsers: User[] = [];
+  user: any;
 
-  constructor(private boardService: BoardService, private route: ActivatedRoute) {
-
-  }
+  constructor(private boardService: BoardService, private route: ActivatedRoute, private router: Router, private userService: UserService) { }
 
   ngOnInit(): void {
     this.boardService.getBoardById(Number(this.route.snapshot.paramMap.get('id'))).then(response => {
       this.board = response;
-      this.boardColumns = this.board.boardColumns;
+      this.boardColumns = this.board.boardColumns.sort((a: BoardColumn, b: BoardColumn) => {
+        if (a.columnOrder < b.columnOrder) {
+          return -1;
+        }
+        if (a.columnOrder > b.columnOrder) {
+          return 1;
+        }
+
+        return 0
+      });
     });
   }
 
-  tasks: Task[] = [
-    new Task(null, 'Name', 'Description', 1, 'red', null)
-  ];
-  // columns = [
-  //   new BoardColumn(null, "To-do", null, 1),
-  //   new BoardColumn(null, "In progress", null, 2),
-  //   new BoardColumn(null, "Done", null, 3)
-  // ];
-
-  draggedTask: Task;
-  display = false;
-  selectedTask: Task;
-
-  showTask(t: Task) {
+  showTask(t: BoardTask) {
     this.display = true;
     this.selectedTask = t;
+  }
+
+  filterUsers(event) {
+    this.userService.getUsersByUsernameAndBoardId(event, this.board.id)
+    .then(response => {
+      this.filteredUsers = response;
+    })
+  }
+
+  addTask() {
+    this.display = true;
+    this.taskHeader = 'Add task';
+    this.selectedTask = new BoardTask();
   }
 
   closeTask() {
@@ -49,10 +65,9 @@ export class BoardComponent implements OnInit {
 
   saveTask() {
     this.display = false;;
-    console.log(this.selectedTask.name);
   }
 
-  dragStart(event, t: Task) {
+  dragStart(event, t: BoardTask) {
     this.draggedTask = t;
   }
 
@@ -70,7 +85,7 @@ export class BoardComponent implements OnInit {
     this.draggedTask = null;
   }
 
-  findIndex(t: Task) {
+  findIndex(t: BoardTask) {
     let index = -1;
     for (let i = 0; i < this.tasks.length; i++) {
       if (t.boardColumnId === this.tasks[i].boardColumnId) {
@@ -79,6 +94,10 @@ export class BoardComponent implements OnInit {
       }
     }
     return index;
+  }
+
+  edit() {
+    this.router.navigate(['/manage-board', this.board.id]);
   }
 
 }

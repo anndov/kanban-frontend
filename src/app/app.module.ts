@@ -24,6 +24,7 @@ import { SignupComponent } from './signup/signup.component';
 import { BoardComponent } from './board/board.component';
 import { ManageBoardComponent } from './board/manage-board.component';
 import { BoardService } from './board/board.service';
+import { BoardTaskService } from './task/boardtask.service';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,7 @@ import { BoardService } from './board/board.service';
     InputTextModule, PasswordModule, ConfirmDialogModule, PanelModule, AutoCompleteModule, 
     DragDropModule, CalendarModule, InputTextareaModule
   ],
-  providers: [ UserService, ConfirmationService, AuthenticationService, AuthGuard, BoardService ],
+  providers: [ UserService, ConfirmationService, AuthenticationService, AuthGuard, BoardService, BoardTaskService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

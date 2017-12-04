@@ -6,15 +6,14 @@
     <div *ngFor="let c of boardColumns" style="width: 100%; padding: 0px">
       <div class="ui-grid-col" pDroppable="tsks" (onDragEnd)="dragEnd($event)" (onDrop)="drop($event, c)">
         <p-panel header="{{c.name}}">
-          <button type="button" pButton (click)="addTask()" class="ui-button-primary" icon="fa-plus"></button>
-          <div style="height: 700px">
-            <div style="margin:0;padding:0">
+          <button type="button" pButton (click)="addTask(c.id)" class="ui-button-primary" icon="fa-plus"></button>
+          <div style="height: 700px; margin:0;padding:0">
               <div *ngFor="let task of tasks">
-                <div *ngIf="task.boardColumnId==c.columnOrder" [style]="{'margin':'8px 0 0 8px;float:left'}" pDraggable="tsks" (onDragStart)="dragStart($event,task)">
-                  <div on-dblclick="showTask(task)" style="margin: 20px;">
-                    {{task.name}} - {{task.description}}
+                <div *ngIf="task.boardColumnId==c.id" [style]="{'margin':'8px 0 0 8px;float:left'}" pDraggable="tsks" (onDragStart)="dragStart($event,task)">
+                  <div on-dblclick="showTask(task)" style="white-space: pre; border: 1px solidk;">
+                    {{task.name}}
+                    {{task.description}}
                   </div>
-                </div>
               </div>
             </div>
           </div>
@@ -52,16 +51,25 @@
           Assignee :
         </div>
         <div class="ui-grid-col-7">
-          <p-autoComplete [(ngModel)]="user" [suggestions]="filteredUsers" 
+          <p-autoComplete [(ngModel)]="assignee" appendTo="body" [suggestions]="filteredUsers" 
           (completeMethod)="filterUsers($event.query)" name="assignee"
             field="username" [size]="30" [minLength]="1">
           </p-autoComplete>
         </div>
       </div>
 
+      <div class="ui-grid-row">
+        <div class="ui-grid-col-5">
+          Due date :
+        </div>
+        <div class="ui-grid-col-7">
+          <p-calendar [(ngModel)]="dueDate" name="dueDate" appendTo="body" ></p-calendar>
+        </div>
+      </div>
+
     </div>
     <p-footer>
-      <button pButton type="button" (click)="saveTask()" label="Save Task"></button>
+      <button pButton type="button" (click)="submitTask()" label="Save Task"></button>
       <button pButton type="button" (click)="closeTask()" label="Cancel" class="ui-button-secondary"></button>
     </p-footer>
   </p-dialog>

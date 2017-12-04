@@ -8,12 +8,11 @@
         <p-panel header="{{c.name}}">
           <button type="button" pButton (click)="addTask(c.id)" class="ui-button-primary" icon="fa-plus"></button>
           <div style="height: 700px; margin:0;padding:0">
-              <div *ngFor="let task of tasks">
-                <div *ngIf="task.boardColumnId==c.id" [style]="{'margin':'8px 0 0 8px;float:left'}" pDraggable="tsks" (onDragStart)="dragStart($event,task)">
-                  <div on-dblclick="showTask(task)" style="white-space: pre; border: 1px solidk;">
-                    {{task.name}}
-                    {{task.description}}
-                  </div>
+            <div *ngFor="let task of tasks">
+              <div *ngIf="task.boardColumnId==c.id" [style]="{'margin':'8px 0 0 8px;float:left'}" pDraggable="tsks" (onDragStart)="dragStart($event,task)">
+                <div on-click="showTask(task)" class="kan-card" [ngStyle]="setStyles(task)">
+                  {{task.name}}&#x0a; {{task.description}}
+                </div>
               </div>
             </div>
           </div>
@@ -24,7 +23,7 @@
 </div>
 
 <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm">
-  <p-dialog [(visible)]="display" header="{{taskHeader}}" *ngIf="selectedTask" showEffect="fade" [modal]="true" [responsive]="true">
+  <p-dialog [(visible)]="display" minWidth="600" minHeight="700" header="{{taskHeader}}" *ngIf="selectedTask" showEffect="fade" [modal]="true" [responsive]="true">
 
     <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
 
@@ -51,9 +50,8 @@
           Assignee :
         </div>
         <div class="ui-grid-col-7">
-          <p-autoComplete [(ngModel)]="assignee" appendTo="body" [suggestions]="filteredUsers" 
-          (completeMethod)="filterUsers($event.query)" name="assignee"
-            field="username" [size]="30" [minLength]="1">
+          <p-autoComplete [(ngModel)]="assignee" appendTo="body" [suggestions]="filteredUsers" (completeMethod)="filterUsers($event.query)"
+            name="assignee" field="username" [size]="30" [minLength]="1">
           </p-autoComplete>
         </div>
       </div>
@@ -63,14 +61,29 @@
           Due date :
         </div>
         <div class="ui-grid-col-7">
-          <p-calendar [(ngModel)]="dueDate" name="dueDate" appendTo="body" ></p-calendar>
+          <p-calendar [(ngModel)]="dueDate" name="dueDate" appendTo="body"></p-calendar>
+        </div>
+      </div>
+
+      <div class="ui-grid-row">
+        <div class="ui-grid-col-5">
+          Color :
+        </div>
+        <div class="ui-grid-col-7">
+          <p-colorPicker [(ngModel)]="selectedTask.color" name="color" ></p-colorPicker>
         </div>
       </div>
 
     </div>
     <p-footer>
-      <button pButton type="button" (click)="submitTask()" label="Save Task"></button>
-      <button pButton type="button" (click)="closeTask()" label="Cancel" class="ui-button-secondary"></button>
+      <div style="float: left;">
+        <button pButton type="button" (click)="submitTask()" label="Save Task"></button>
+        <button pButton type="button" (click)="closeTask()" label="Cancel" class="ui-button-secondary"></button>
+      </div>
+      <div align="right">
+          <button pButton type="button" (click)="deleteTask(selectedTask)" label="Delete Task" class="ui-button-danger"></button>
+      </div>
     </p-footer>
   </p-dialog>
 </form>
+<p-confirmDialog></p-confirmDialog>

@@ -11,7 +11,8 @@
             <div *ngFor="let task of tasks">
               <div *ngIf="task.boardColumnId==c.id" [style]="{'margin':'8px 0 0 8px;float:left'}" pDraggable="tsks" (onDragStart)="dragStart($event,task)">
                 <div on-click="showTask(task)" class="kan-card" [ngStyle]="setStyles(task)">
-                  {{task.name}}&#x0a; {{task.description}}
+                  {{task.name}}
+                  {{task.description}}
                 </div>
               </div>
             </div>

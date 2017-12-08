@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/primeng';
 import { Board } from '../board/board';
 import { BoardService } from '../board/board.service';
@@ -10,8 +10,8 @@ import { Router } from '@angular/router';
   selector: 'kan-nav',
   templateUrl: './nav.component.html'
 })
-export class NavComponent {
-  
+export class NavComponent implements OnInit {
+
   items: MenuItem[];
 
   boards: Board[] = [];
@@ -20,22 +20,21 @@ export class NavComponent {
 
   currentUser;
 
-  constructor(private boardService: BoardService, private router: Router) {
+  constructor(private boardService: BoardService) {
+  }
+
+  ngOnInit(): void {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser')).username;
 
     this.boardService.getBoards().then(response => {
       this.boards = response as Board[];
       for (let b of this.boards) {
         this.boardItems.push({
-          label: b.name, command: (event: Event) => {
-            this.router.navigate(['/board', b.id]);
-          }
+          label: b.name, routerLink: ['/board', b.id]
         });
       }
       this.boardItems.push({
-        label: "Create board", icon: "fa-plus", command: (event: Event) => {
-          this.router.navigate(['/manage-board', 0]);
-        }
+        label: "Create board", icon: "fa-plus", routerLink: ['/manage-board', 0]
       });
       this.items = [
         { label: "Home", routerLink: "/home" },

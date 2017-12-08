@@ -1,4 +1,5 @@
 <div style="margin-bottom:10px; margin-left:10px">
+  <button pButton (click)="boardMembers()" type="button" class="ui-button-primary" label="Board members"></button>
   <button pButton (click)="edit()" type="button" class="ui-button-secondary" label="Edit"></button>
 </div>
 <div class="ui-grid ui-grid-pad ui-grid-responsive">
@@ -11,7 +12,7 @@
             <div *ngFor="let task of tasks">
               <div *ngIf="task.boardColumnId==c.id" [style]="{'margin':'8px 0 0 8px;float:left'}" pDraggable="tsks" (onDragStart)="dragStart($event,task)">
                 <div on-click="showTask(task)" class="kan-card" [ngStyle]="setStyles(task)">
-                  {{task.name}}
+                  {{task.name}} 
                   {{task.description}}
                 </div>
               </div>
@@ -24,7 +25,8 @@
 </div>
 
 <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm">
-  <p-dialog [(visible)]="display" minWidth="600" minHeight="700" header="{{taskHeader}}" *ngIf="selectedTask" showEffect="fade" [modal]="true" [responsive]="true">
+  <p-dialog [(visible)]="display" minWidth="600" minHeight="700" header="{{taskHeader}}" *ngIf="selectedTask" showEffect="fade"
+    [modal]="true" [responsive]="true">
 
     <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
 
@@ -62,7 +64,7 @@
           Due date :
         </div>
         <div class="ui-grid-col-7">
-          <p-calendar [(ngModel)]="dueDate" name="dueDate" appendTo="body"></p-calendar>
+          <p-calendar [(ngModel)]="selectedTask.dueDate" name="dueDate" appendTo="body"></p-calendar>
         </div>
       </div>
 
@@ -71,7 +73,7 @@
           Color :
         </div>
         <div class="ui-grid-col-7">
-          <p-colorPicker [(ngModel)]="selectedTask.color" name="color" ></p-colorPicker>
+          <p-colorPicker [(ngModel)]="selectedTask.color" name="color"></p-colorPicker>
         </div>
       </div>
 
@@ -82,9 +84,37 @@
         <button pButton type="button" (click)="closeTask()" label="Cancel" class="ui-button-secondary"></button>
       </div>
       <div align="right">
-          <button pButton type="button" (click)="deleteTask(selectedTask)" label="Delete Task" class="ui-button-danger"></button>
+        <button pButton type="button" (click)="deleteTask(selectedTask)" label="Delete Task" class="ui-button-danger"></button>
       </div>
     </p-footer>
   </p-dialog>
 </form>
 <p-confirmDialog></p-confirmDialog>
+
+<!-- Board members -->
+<p-dialog header="Board members" [(visible)]="boardMembersDisplay" [width]="700">
+  
+  <form #fm="ngForm">
+  <div style="margin-bottom: 10px" class="ui-grid">
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4">
+        <input type="text" name="memberEmail" [(ngModel)]="memberEmail" required pInputText pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
+      </div>
+      <div class="ui-grid-col-4">
+        <button type="button" pButton label="Invite member" [disabled]="!fm.valid" (click)="inviteMember()" class="ui-button-primary"></button>
+      </div>
+      <div class="ui-grid-col-4">
+        <label for="">{{inviteLabel}}</label>
+      </div>
+    </div>
+  </div>
+</form>
+
+  <p-dataTable [value]="members">
+    <p-column field="username" header="Username"></p-column>
+    <p-column field="email" header="Email"></p-column>
+  </p-dataTable>
+  <p-footer>
+    <button type="button" pButton label="Close" (click)="closeMembersDisplay()" class="ui-button-secondary"></button>
+  </p-footer>
+</p-dialog>

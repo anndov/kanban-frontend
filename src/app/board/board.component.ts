@@ -25,7 +25,9 @@ export class BoardComponent implements OnInit {
   taskHeader = 'Edit task';
   filteredUsers: User[] = [];
   assignee: User;
-  dueDate: Date;
+  boardMembersDisplay = false;
+  members: User[];
+  inviteLabel: '';
 
   constructor(private taskService: BoardTaskService, private boardService: BoardService
     , private route: ActivatedRoute, private router: Router, private userService: UserService
@@ -44,11 +46,25 @@ export class BoardComponent implements OnInit {
 
         return 0
       });
+
       this.taskService.getTasksByBoardId(this.board.id)
         .then(response => {
           this.tasks = response;
         });
+
+      this.userService.getUsersByBoardId(this.board.id)
+        .then(response => this.members = response);
+
     });
+
+  }
+
+  inviteMember() {
+    console.log('yeap');
+  }
+
+  boardMembers() {
+    this.boardMembersDisplay = true;
   }
 
   setStyles(task: BoardTask) {
@@ -60,12 +76,7 @@ export class BoardComponent implements OnInit {
 
   showTask(t: BoardTask) {
     this.selectedTask = t;
-
-    if (t.dueDate == null)
-      this.dueDate = null;
-    else
-      this.dueDate = new Date(t.dueDate);
-
+    this.selectedTask.dueDate = new Date(this.selectedTask.dueDate);
     this.filterUsers(t.assignee);
     this.assignee = new User();
     this.assignee.username = t.assignee;
@@ -74,7 +85,7 @@ export class BoardComponent implements OnInit {
 
   submitTask() {
     if (this.selectedTask.id == null) {
-      this.selectedTask.dueDate = this.dueDate;
+      console.log(JSON.stringify(this.selectedTask));
       this.selectedTask.assignee = this.assignee.username;
       this.taskService.create(this.selectedTask).then(response => {
         let task: BoardTask = response;
@@ -83,7 +94,6 @@ export class BoardComponent implements OnInit {
       });
     }
     else {
-      this.selectedTask.dueDate = this.dueDate;
       this.selectedTask.assignee = this.assignee.username;
       this.taskService.update(this.selectedTask).then(response => {
         let task: BoardTask = response;
@@ -137,6 +147,10 @@ export class BoardComponent implements OnInit {
 
   closeTask() {
     this.display = false;
+  }
+
+  closeMembersDisplay() {
+    this.boardMembersDisplay = false;
   }
 
   saveTask() {

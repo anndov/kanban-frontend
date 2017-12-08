@@ -1,16 +1,17 @@
 .kan-card {
-    white-space: pre;
-    /* width:250px;  */
+    /* white-space: pre; */
+    white-space: pre-line;
     height:100px;
     padding:5px;
+    margin: 5px;
     font-family: "Lucida Handwriting", cursive;
     font-size:15px;
     box-shadow: 2px 4px 6px #444;
     -moz-box-shadow: 2px 4px 6px #444;
     -webkit-box-shadow: 2px 4px 6px #444;
-    transform: rotate(-3deg);
-    -moz-transform: rotate(-3deg);
-    -webkit-transform: rotate(-3deg);
-    -o-transform: rotate(-3deg);
-    -ms-transform: rotate(-3deg);
+    transform: rotate(-1deg);
+    -moz-transform: rotate(-1deg);
+    -webkit-transform: rotate(-1deg);
+    -o-transform: rotate(-1deg);
+    -ms-transform: rotate(-1deg);
 }

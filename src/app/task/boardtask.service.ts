@@ -39,14 +39,14 @@ export class BoardTaskService {
     }
 
     getTasksByBoardColumnId(boardColumnId: number): Promise<BoardTask[]> {
-        return this.http.get(this.tasksUrl + '/board_column_id/' + boardColumnId, { headers: this.headers })
+        return this.http.get(this.tasksUrl + '/board-column-id/' + boardColumnId, { headers: this.headers })
             .toPromise()
             .then(response => response.json().content as BoardTask[])
             .catch(this.handleError);
     }
 
     getTasksByBoardId(boardId: number): Promise<BoardTask[]> {
-        return this.http.get(this.tasksUrl + '/board_id/' + boardId, { headers: this.headers })
+        return this.http.get(this.tasksUrl + '/board-id/' + boardId, { headers: this.headers })
             .toPromise()
             .then(response => response.json().content as BoardTask[])
             .catch(this.handleError);

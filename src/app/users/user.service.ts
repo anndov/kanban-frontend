@@ -65,6 +65,15 @@ export class UserService {
       .catch(this.handleError);
   }
 
+  getUsersByBoardId(boardId: number): Promise<User[]> {
+    let url = this.usersUrl + '/board-id/' + boardId;
+
+    return this.http.get(url, { headers: this.headers })
+      .toPromise()
+      .then(response => response.json() as User[])
+      .catch(this.handleError);
+  }
+
   getByAuthenticatedUser(): Promise<User> {
     let url = this.usersUrl + '/' + JSON.parse(localStorage.getItem('currentUser')).username;
     return this.http.get(url, { headers: this.headers })

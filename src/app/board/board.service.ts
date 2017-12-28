@@ -23,33 +23,37 @@ export class BoardService {
     }
 
     create(board: Board): Promise<Board> {
-        return this.http.post(this.boardsURL, JSON.stringify(board), {headers: this.headers})
-        .toPromise()
-        .then(response => response.json() as Board)
-        .catch(this.handleError);
+        return this.http.post(this.boardsURL, JSON.stringify(board), { headers: this.headers })
+            .toPromise()
+            .then(response => response.json() as Board)
+            .catch(this.handleError);
+    }
+
+    delete(id: number) {
+        this.http.delete(this.boardsURL + '/' + id, { headers: this.headers }).toPromise();
     }
 
     update(board: Board): Promise<Board> {
-        return this.http.put(this.boardsURL, JSON.stringify(board), {headers: this.headers})
-        .toPromise()
-        .then(response => response.json() as Board)
-        .catch(this.handleError);
+        return this.http.put(this.boardsURL, JSON.stringify(board), { headers: this.headers })
+            .toPromise()
+            .then(response => response.json() as Board)
+            .catch(this.handleError);
     }
 
     getBoards(): Promise<Board[]> {
         const url = this.boardsURL + '/username/' + JSON.parse(localStorage.getItem('currentUser')).username;
-        return this.http.get(url, {headers: this.headers})
-        .toPromise()
-        .then(response => response.json() as Board[])
-        .catch(this.handleError);
+        return this.http.get(url, { headers: this.headers })
+            .toPromise()
+            .then(response => response.json() as Board[])
+            .catch(this.handleError);
     }
 
     getBoardById(id: number): Promise<Board> {
         const url = this.boardsURL + '/' + id;
-        return this.http.get(url, { headers:this.headers })
-        .toPromise()
-        .then(response => response.json() as Board)
-        .catch(this.handleError);
+        return this.http.get(url, { headers: this.headers })
+            .toPromise()
+            .then(response => response.json() as Board)
+            .catch(this.handleError);
     }
 
     // getBoardsByParticipantId(): Promise<Board[]> {

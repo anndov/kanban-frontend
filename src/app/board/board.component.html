@@ -1,6 +1,8 @@
 <div style="margin-bottom:10px; margin-left:10px">
   <button pButton (click)="boardMembers()" type="button" class="ui-button-primary" label="Board members"></button>
-  <button pButton (click)="edit()" type="button" class="ui-button-secondary" label="Edit"></button>
+  <button pButton (click)="edit()" type="button" class="ui-button-secondary" label="Edit" *ngIf="isOwner"></button>
+  <button pButton (click)="delete()" type="button" class="ui-button-danger" label="Delete" icon="fa-trash" *ngIf="isOwner"></button>
+  
 </div>
 <div class="ui-grid ui-grid-pad ui-grid-responsive">
   <div class="ui-grid-row">
@@ -24,8 +26,8 @@
   </div>
 </div>
 
-<form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm">
-  <p-dialog [(visible)]="display" minWidth="600" minHeight="700" header="{{taskHeader}}" *ngIf="selectedTask" showEffect="fade"
+<form name="form" (ngSubmit)="f.form.valid" #f="ngForm">
+  <p-dialog [(visible)]="display" minWidth="600" minHeight="800" header="{{taskHeader}}" *ngIf="selectedTask" showEffect="fade"
     [modal]="true" [responsive]="true">
 
     <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
@@ -93,22 +95,22 @@
 
 <!-- Board members -->
 <p-dialog header="Board members" [(visible)]="boardMembersDisplay" [width]="700">
-  
+
   <form #fm="ngForm">
-  <div style="margin-bottom: 10px" class="ui-grid">
-    <div class="ui-grid-row">
-      <div class="ui-grid-col-4">
-        <input type="text" name="memberEmail" [(ngModel)]="memberEmail" required pInputText pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
-      </div>
-      <div class="ui-grid-col-4">
-        <button type="button" pButton label="Invite member" [disabled]="!fm.valid" (click)="inviteMember()" class="ui-button-primary"></button>
-      </div>
-      <div class="ui-grid-col-4">
-        <label for="">{{inviteLabel}}</label>
+    <div style="margin-bottom: 10px" class="ui-grid">
+      <div class="ui-grid-row">
+        <div class="ui-grid-col-4">
+          <input type="text" name="memberEmail" [(ngModel)]="memberEmail" required pInputText pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
+        </div>
+        <div class="ui-grid-col-4">
+          <button type="button" pButton label="Invite member" [disabled]="!fm.valid" (click)="inviteMember()" class="ui-button-primary"></button>
+        </div>
+        <div class="ui-grid-col-4">
+          <button type="button" pButton label="Show invited members" (click)="showMembers()" class="ui-button-secondary"></button>
+        </div>
       </div>
     </div>
-  </div>
-</form>
+  </form>
 
   <p-dataTable [value]="members">
     <p-column field="username" header="Username"></p-column>
@@ -118,3 +120,13 @@
     <button type="button" pButton label="Close" (click)="closeMembersDisplay()" class="ui-button-secondary"></button>
   </p-footer>
 </p-dialog>
+
+<p-dialog header="Invited members" [(visible)]="invitedMembersDisplay" [width]="600">
+  <ul *ngFor="let item of invitedMembers">
+    <li>
+      {{item}}
+    </li>
+  </ul>
+</p-dialog>
+
+<p-growl [value]="msgs"></p-growl>

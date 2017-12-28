@@ -14,7 +14,7 @@
             required>
 
             <h3 class="first">Email</h3>
-            <input id="password" type="text" size="30" pInputText name="email" [(ngModel)]="model.email" #email="ngModel"
+            <input id="email" type="text" size="30" pInputText name="email" [(ngModel)]="model.email" #email="ngModel"
                 required>
 
         <p-footer>
@@ -23,4 +23,4 @@
         </p-footer>
     </p-panel>
 </form>
-{{signupStatus}}
+<p-messages [(value)]="msgs"></p-messages>

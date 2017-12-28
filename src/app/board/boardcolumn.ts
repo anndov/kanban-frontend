@@ -6,6 +6,8 @@ export class BoardColumn {
     name: string;
     board: Board;
     columnOrder: number;
+    max: number;
+    current: number;
     constructor(
         id: number,
         name: string,

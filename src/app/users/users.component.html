@@ -54,7 +54,7 @@
 <button type="button" (click)="showDialogToAdd()" pButton icon="fa-external-link-square" label="Add"></button>
 <!-- Data table -->
 <p-dataTable [style]="{'margin-top':'10px'}" [immutable]=false [value]="users" selectionMode="single" [(selection)]="selectedUser" (onRowSelect)="onRowSelect($event)"
-  rows=5 [paginator]="true" [lazy]="true" [totalRecords]="totalRecords" (onLazyLoad)="loadUsersLazy($event)" [responsive]="true">
+  rows=20 [paginator]="true" [lazy]="true" [totalRecords]="totalRecords" (onLazyLoad)="loadUsersLazy($event)" [responsive]="true">
   <p-column field="username" header="User Name"></p-column>
   <p-column field="email" header="Email"></p-column>
   <p-column field="firstname" header="First Name"></p-column>

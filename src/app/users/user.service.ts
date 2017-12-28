@@ -82,6 +82,26 @@ export class UserService {
       .catch(this.handleError);
   }
 
+  changePassword(id: number, oldPassword: string, newPassword: string): Promise<boolean> {
+    return this.http.patch(this.usersUrl + '/password-change/' + id,
+      JSON.stringify({ "oldPassword": oldPassword, "newPassword": newPassword }),
+      { headers: this.headers })
+      .toPromise().then(res => {
+        return true;
+      }
+      ).catch((error: any) => {
+        return false;
+      }
+      );
+  }
+
+  updateProfile(id: number, firstName: string, lastName: string) {
+    this.http.patch(this.usersUrl + '/update-profile/' + id, 
+    JSON.stringify({"firstName": firstName, "lastName": lastName}), {headers: this.headers})
+    .toPromise()
+    .catch(this.handleError);
+  }
+
   private handleError(error: any): Promise<any> {
     return Promise.reject(error.message || error);
   }

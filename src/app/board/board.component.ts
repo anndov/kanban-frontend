@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Board } from './board';
 import { BoardColumn } from './boardcolumn';
 import { BoardService } from './board.service';
@@ -7,7 +7,9 @@ import { BoardTask } from '../task/boardtask';
 import { User } from '../users/user';
 import { UserService } from '../users/user.service';
 import { BoardTaskService } from '../task/boardtask.service';
-import { ConfirmationService } from 'primeng/primeng';
+import { ConfirmationService, Message } from 'primeng/primeng';
+import { InviteTokenService } from '../invitetoken/invitetoken.service';
+import { BoardColumnService } from './boardcolumn.service';
 
 @Component({
   selector: 'kan-board',
@@ -26,16 +28,48 @@ export class BoardComponent implements OnInit {
   filteredUsers: User[] = [];
   assignee: User;
   boardMembersDisplay = false;
+  invitedMembersDisplay = false;
   members: User[];
   inviteLabel: '';
+  memberEmail: '';
+  invitedMembers: string[];
+  isOwner = false;
+  username: string;
+  userInfo: string;
+  msgs: Message[] = [];
 
   constructor(private taskService: BoardTaskService, private boardService: BoardService
     , private route: ActivatedRoute, private router: Router, private userService: UserService
-    , private confirmationService: ConfirmationService) { }
+    , private confirmationService: ConfirmationService, private inviteTokenService: InviteTokenService
+    , private boardColumnService: BoardColumnService) { }
 
-  ngOnInit(): void {
-    this.boardService.getBoardById(Number(this.route.snapshot.paramMap.get('id'))).then(response => {
+  
+    ngOnInit(): void {
+    this.route.params
+      .subscribe(params => this.handleRouteChange(params));
+  }
+
+  delete() {
+    this.confirmationService.confirm({
+      header: 'Delete board',
+      message: 'Are you sure that you want to perform this action?',
+      accept: () => {
+          this.boardService.delete(this.board.id);
+          this.router.navigate(['/']);
+      }
+  });
+  }
+
+  handleRouteChange(params) {
+    this.boardService.getBoardById(Number(params['id'])).then(response => {
       this.board = response;
+      this.username = JSON.parse(localStorage.getItem("currentUser")).username;
+      if (this.board.owner.username == this.username)
+        this.isOwner = true;
+      if (this.board.owner.firstname != null || this.board.owner.lastname != null)
+        this.userInfo = this.board.owner.firstname + ' ' + this.board.owner.lastname;
+      else
+        this.userInfo = this.username;
       this.boardColumns = this.board.boardColumns.sort((a: BoardColumn, b: BoardColumn) => {
         if (a.columnOrder < b.columnOrder) {
           return -1;
@@ -56,11 +90,18 @@ export class BoardComponent implements OnInit {
         .then(response => this.members = response);
 
     });
-
   }
 
   inviteMember() {
-    console.log('yeap');
+    this.inviteTokenService.sendInvitation(this.memberEmail, this.board.id);
+    this.memberEmail = '';
+  }
+
+  showMembers() {
+    this.invitedMembersDisplay = true;
+    this.inviteTokenService.getInvitedMembers(this.board.id).then(response => {
+      this.invitedMembers = response;
+    });
   }
 
   boardMembers() {
@@ -84,27 +125,35 @@ export class BoardComponent implements OnInit {
   }
 
   submitTask() {
-    if (this.selectedTask.id == null) {
-      console.log(JSON.stringify(this.selectedTask));
-      this.selectedTask.assignee = this.assignee.username;
-      this.taskService.create(this.selectedTask).then(response => {
-        let task: BoardTask = response;
-        this.tasks.push(task);
-        this.display = false;
-      });
-    }
-    else {
-      this.selectedTask.assignee = this.assignee.username;
-      this.taskService.update(this.selectedTask).then(response => {
-        let task: BoardTask = response;
-        this.tasks.forEach((t, index) => {
-          if (t.id == task.id) {
-            this.tasks[index] = task;
+    this.boardColumns.forEach(bc => {
+      if(bc.id == this.selectedTask.boardColumnId) {
+        if(bc.current <= bc.max || bc.max == null) {
+          if (this.selectedTask.id == null) {
+            bc.current = bc.current + 1;
+            this.boardColumnService.update(bc);
+            this.boardColumns[this.findIndexBoardColumn(bc)] = bc;
+            this.selectedTask.assignee = this.assignee.username;
+            this.taskService.create(this.selectedTask).then(response => {
+              let task: BoardTask = response;
+              this.tasks.push(task);
+              this.display = false;
+            });
           }
-          this.display = false;
-        });
-      });
-    }
+          else {
+            this.selectedTask.assignee = this.assignee.username;
+            this.taskService.update(this.selectedTask).then(response => {
+              let task: BoardTask = response;
+              this.tasks.forEach((t, index) => {
+                if (t.id == task.id) {
+                  this.tasks[index] = task;
+                }
+                this.display = false;
+              });
+            });
+          }
+        }
+      }
+    });
 
   }
 
@@ -153,23 +202,28 @@ export class BoardComponent implements OnInit {
     this.boardMembersDisplay = false;
   }
 
-  saveTask() {
-    this.display = false;;
-  }
-
   dragStart(event, t: BoardTask) {
     this.draggedTask = t;
   }
 
   drop(event, bc: BoardColumn) {
-    if (this.draggedTask) {
-      this.tasks.forEach((task, index) => {
-        if (task.id == this.draggedTask.id) {
-          this.tasks[index].boardColumnId = bc.id;
-          this.taskService.update(this.tasks[index]);
-        }
-      });
-      this.draggedTask = null;
+    if(bc.current != bc.max) {
+      bc.current = bc.current + 1;
+      this.boardColumnService.update(bc);
+      this.boardColumns[this.findIndexBoardColumn(bc)] = bc;
+      console.log(this.boardColumns);
+      if (this.draggedTask) {
+        this.tasks.forEach((task, index) => {
+          if (task.id == this.draggedTask.id) {
+            this.tasks[index].boardColumnId = bc.id;
+            this.taskService.update(this.tasks[index]);
+          }
+        });
+        this.draggedTask = null;
+      }
+    }
+    else {
+      this.msgs = [{severity:'info', summary:'Limit', detail:'Column task limit reached'}];
     }
   }
 
@@ -181,6 +235,17 @@ export class BoardComponent implements OnInit {
     let index = -1;
     for (let i = 0; i < this.tasks.length; i++) {
       if (t.boardColumnId === this.tasks[i].boardColumnId) {
+        index = i;
+        break;
+      }
+    }
+    return index;
+  }
+
+  findIndexBoardColumn(t: BoardColumn) {
+    let index = -1;
+    for (let i = 0; i < this.boardColumns.length; i++) {
+      if (t.id === this.boardColumns[i].id) {
         index = i;
         break;
       }

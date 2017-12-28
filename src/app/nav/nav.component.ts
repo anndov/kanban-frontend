@@ -5,6 +5,7 @@ import { BoardService } from '../board/board.service';
 import { BoardColumn } from '../board/boardcolumn';
 import { User } from '../users/user';
 import { Router } from '@angular/router';
+import { Authority } from '../users/Authority';
 
 @Component({
   selector: 'kan-nav',
@@ -13,17 +14,29 @@ import { Router } from '@angular/router';
 export class NavComponent implements OnInit {
 
   items: MenuItem[];
-
   boards: Board[] = [];
-
   boardItems: any[] = [];
-
   currentUser;
+  authorities: Authority[];
+  isAdmin = false;
 
   constructor(private boardService: BoardService) {
   }
 
   ngOnInit(): void {
+    this.authorities = JSON.parse(localStorage.getItem("currentRoles"));
+    this.authorities.forEach(auth => {
+      if (auth.name == 'ROLE_ADMIN')
+        this.isAdmin = true;
+    });
+    this.loadNav();
+  }
+
+  somethinelse() {
+    console.log('somethinelse');
+  }
+
+  loadNav() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser')).username;
 
     this.boardService.getBoards().then(response => {
@@ -37,9 +50,14 @@ export class NavComponent implements OnInit {
         label: "Create board", icon: "fa-plus", routerLink: ['/manage-board', 0]
       });
       this.items = [
-        { label: "Home", routerLink: "/home" },
         { label: "Select board", items: this.boardItems },
-        { label: "Users", routerLink: "/users" }
+        {
+          label: "Settings", items: [
+            { label: "Change password", routerLink: "/change-password" },
+            { label: "Update profile", routerLink: "/update-profile" }
+          ]
+        },
+        { label: "Users", routerLink: "/users", visible: this.isAdmin }
       ];
     });
   }

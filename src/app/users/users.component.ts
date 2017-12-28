@@ -118,7 +118,7 @@ export class UsersComponent implements OnInit {
 
     //imitate db connection over a network
     setTimeout(() => {
-      this.userService.getUsers((event.first / 5), event.rows).then(res => {
+      this.userService.getUsers((event.first / 20), event.rows).then(res => {
         let page: any[] = res;
         this.users = page[0] as User[];
       });

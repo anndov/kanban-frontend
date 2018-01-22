@@ -211,7 +211,6 @@ export class BoardComponent implements OnInit {
       bc.current = bc.current + 1;
       this.boardColumnService.update(bc);
       this.boardColumns[this.findIndexBoardColumn(bc)] = bc;
-      console.log(this.boardColumns);
       if (this.draggedTask) {
         this.tasks.forEach((task, index) => {
           if (task.id == this.draggedTask.id) {

@@ -9,12 +9,15 @@ import { Board } from "./board";
 import { Constants } from "../_confs/constants";
 import { AuthenticationService } from "../_services/authentication.service";
 import { Observable } from "rxjs/Observable";
+import { Subject, BehaviorSubject } from "rxjs";
 
 @Injectable()
 export class BoardService {
 
     private headers = new Headers();
     private boardsURL = Constants.URL + '/rest/boards';
+    private boards: Board[] = [];
+    private _boards = new BehaviorSubject<Board[]>([]);
 
     constructor(private router: Router, private http: Http, private authenticationService: AuthenticationService) {
         this.headers.append('Content-Type', 'application/json; charset=utf-8');
@@ -37,6 +40,23 @@ export class BoardService {
         return this.http.put(this.boardsURL, JSON.stringify(board), { headers: this.headers })
             .toPromise()
             .then(response => response.json() as Board)
+            .catch(this.handleError);
+    }
+
+    getList() {
+        this._boards.next(this.boards);
+        return this._boards.asObservable();
+    }
+
+    addBoard(board: Board) {
+        this.boards.push(board);
+    }
+
+    loadBoards(): Promise<any>{
+        const url = this.boardsURL + '/username/' + JSON.parse(localStorage.getItem('currentUser')).username;
+        return this.http.get(url, { headers: this.headers })
+            .toPromise()
+            .then(response => this.boards = response.json() as Board[])
             .catch(this.handleError);
     }
 

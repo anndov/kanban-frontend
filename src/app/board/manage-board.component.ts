@@ -7,6 +7,7 @@ import { User } from '../users/user';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Message } from 'primeng/primeng';
 import { NavComponent } from '../nav/nav.component';
+import { NavService } from '../_services/nav.service';
 
 @Component({
   selector: 'kan-manage-board',
@@ -63,6 +64,7 @@ export class ManageBoardComponent implements OnInit {
           .then(response => {
             this.board = response;
             if(this.board.id != null) {
+              
               this.msgs = [];
               this.msgs.push({severity:'success', summary:'Created', detail:'Board has successfully created'});
               this.router.navigate(['/manage-board', this.board.id]);

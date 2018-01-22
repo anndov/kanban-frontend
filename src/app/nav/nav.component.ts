@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DoCheck, AfterViewChecked, AfterViewInit, AfterContentChecked, AfterContentInit, OnChanges } from '@angular/core';
 import { MenuItem } from 'primeng/primeng';
 import { Board } from '../board/board';
 import { BoardService } from '../board/board.service';
@@ -6,6 +6,7 @@ import { BoardColumn } from '../board/boardcolumn';
 import { User } from '../users/user';
 import { Router } from '@angular/router';
 import { Authority } from '../users/Authority';
+import { NavService } from '../_services/nav.service';
 
 @Component({
   selector: 'kan-nav',
@@ -25,15 +26,13 @@ export class NavComponent implements OnInit {
 
   ngOnInit(): void {
     this.authorities = JSON.parse(localStorage.getItem("currentRoles"));
-    this.authorities.forEach(auth => {
-      if (auth.name == 'ROLE_ADMIN')
-        this.isAdmin = true;
-    });
+    if (this.authorities != null)
+      this.authorities.forEach(auth => {
+        if (auth.name == 'ROLE_ADMIN')
+          this.isAdmin = true;
+      });
     this.loadNav();
-  }
-
-  somethinelse() {
-    console.log('somethinelse');
+    
   }
 
   loadNav() {

@@ -6,6 +6,7 @@ import { Message } from 'primeng/primeng';
 import { UserService } from '../users/user.service';
 import { User } from '../users/user';
 import { Authority } from '../users/Authority';
+import { BoardService } from '../board/board.service';
 
 @Component({
     selector: 'kan-login',

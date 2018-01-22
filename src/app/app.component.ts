@@ -1,5 +1,6 @@
 import { Component, OnInit, OnChanges, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { AuthenticationService } from './_services/authentication.service';
+import { BoardService } from './board/board.service';
 
 @Component({
   selector: 'kan-root',
@@ -17,5 +18,5 @@ export class AppComponent implements DoCheck {
   }
   
   isLoggedIn;
-  constructor(private authenticationService: AuthenticationService) { }
+  constructor(private boardService: BoardService, private authenticationService: AuthenticationService) { }
 }

@@ -8,10 +8,13 @@ import { BoardComponent } from './board/board.component';
 import { ManageBoardComponent } from './board/manage-board.component';
 import { ChangePasswordComponent } from './users/change-password.component';
 import { UpdateProfileComponent } from './users/update-profile.component';
+import { NavComponent } from './nav/nav.component';
 
 const appRoutes: Routes = [
     { path: 'login', component: LoginComponent },
+    // { path: '', component: NavComponent ,canActivate: [AuthGuard] },
     { path: 'signup', component: SignupComponent },
+    { path: 'login', component: LoginComponent },
     { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
     { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
     { path: 'update-profile', component: UpdateProfileComponent, canActivate: [AuthGuard] },

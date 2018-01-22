@@ -34,11 +34,11 @@ export class LoginComponent implements OnInit {
         this.authenticationService.login(this.model.username, this.model.password).then(response => {
             if (response) {
                 this.router.navigate(['/']);
-                this.userService.getByAuthenticatedUser().then(res => {
-                    localStorage.setItem("currentRoles", JSON.stringify(res.authorities));
-                    localStorage.setItem("currentUserId", JSON.stringify(res.id));
-                }
-                );
+                // this.userService.getByAuthenticatedUser().then(res => {
+                //     localStorage.setItem("currentRoles", JSON.stringify(res.authorities));
+                //     localStorage.setItem("currentUserId", JSON.stringify(res.id));
+                // }
+                // );
             }
 
             else {

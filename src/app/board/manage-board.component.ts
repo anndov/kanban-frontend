@@ -7,7 +7,6 @@ import { User } from '../users/user';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Message } from 'primeng/primeng';
 import { NavComponent } from '../nav/nav.component';
-import { NavService } from '../_services/nav.service';
 
 @Component({
   selector: 'kan-manage-board',

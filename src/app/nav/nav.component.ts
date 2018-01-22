@@ -6,7 +6,6 @@ import { BoardColumn } from '../board/boardcolumn';
 import { User } from '../users/user';
 import { Router } from '@angular/router';
 import { Authority } from '../users/Authority';
-import { NavService } from '../_services/nav.service';
 
 @Component({
   selector: 'kan-nav',

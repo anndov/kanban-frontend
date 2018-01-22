@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { AbstractService } from "../_services/abstract.service";
 import { Router } from "@angular/router";
 import { Http, Headers, Response } from "@angular/http";
 import 'rxjs/add/operator/toPromise';

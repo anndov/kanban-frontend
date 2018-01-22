@@ -29,7 +29,6 @@ import { InviteTokenService } from './invitetoken/invitetoken.service';
 import { BoardColumnService } from './board/boardcolumn.service';
 import { ChangePasswordComponent } from './users/change-password.component';
 import { UpdateProfileComponent } from './users/update-profile.component';
-import { NavService } from './_services/nav.service';
 
 @NgModule({
   declarations: [
@@ -55,7 +54,7 @@ import { NavService } from './_services/nav.service';
     DragDropModule, CalendarModule, InputTextareaModule, ColorPickerModule, MessagesModule, 
     MessageModule, GrowlModule
   ],
-  providers: [ NavService, BoardColumnService, InviteTokenService, ConfirmationService, AuthenticationService, UserService, AuthGuard, BoardService, BoardTaskService ],
+  providers: [ BoardColumnService, InviteTokenService, ConfirmationService, AuthenticationService, UserService, AuthGuard, BoardService, BoardTaskService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
